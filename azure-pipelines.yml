@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+trigger:
+ branches:
+    include:
+    - master
+pool:
+  vmImage: 'ubuntu-latest'
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'Get-ChildItem -Recurse'
+- task: Prisma Cloud IaC Scan@3
+  inputs:
+    Path: '$(System.DefaultWorkingDirectory)/TF/tf12_aws_all_issues'
+    prismaCloudService: 'PA-PC-IAC-DOS-SRVCONN'
+    High: '1'
+    Medium: '1'
+    Low: '1'
+    Operator: 'or'
+    Tags: 'chuckd baller'
